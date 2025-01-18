@@ -52,8 +52,8 @@ def analyze_knn(feature_columns, description, figure_number):
     plt.figure(figure_number, figsize=(10, 6), tight_layout=True)
     plt.bar(k_range, accuracies)
     plt.title(description, fontsize=16, pad=15)
-    plt.xlabel('Liczba sąsiadów (k)', fontsize=14, labelpad=15)
-    plt.ylabel('Dokładność', fontsize=14, labelpad=15)
+    plt.xlabel('Liczba sasiadow (k)', fontsize=14, labelpad=15)
+    plt.ylabel('Dokladnosc', fontsize=14, labelpad=15)
     plt.xticks(k_range, fontsize=12)
     plt.grid(axis='y', which='both')
     plt.ylim(0.60, 1.05)
@@ -62,24 +62,25 @@ def analyze_knn(feature_columns, description, figure_number):
     # Najlepsza wartość k
     print(f'--- Wyniki dla cech {feature_columns} ---')
     best_k = k_range[np.argmax(accuracies)]    # Zwraca indeks maksymalnej wartości z listy accuracies, jeśli są remisy to zwraca pierwszy
-    print(f'Najlepsze k: {best_k}, dokładność: {max(accuracies):.2f}')
+    print(f'Najlepsze k: {best_k}, dokladnosc: {max(accuracies):.2f}')
 
     # Macierz pomyłek dla najlepszego k
     knn = KNeighborsClassifier(n_neighbors=best_k, weights='distance')
     knn.fit(x_train_norm, y_train)
     y_pred = knn.predict(x_test_norm)
     conf_matrix = confusion_matrix(y_test_f, y_pred) # Macierz pomyłek
-    print('Macierz pomyłek dla najlepszego k:')
+    print('Macierz pomylek dla najlepszego k:')
     print(conf_matrix)
 
 # Wywołanie funkcji
-analyze_knn(['Dlugosc kielicha', 'Szerokosc kielicha', 'Dlugosc platka', 'Szerokosc platka'], 'Dokładność klasyfikacji dla różnych k - wszystkie cechy', 1)
-analyze_knn(['Dlugosc kielicha', 'Szerokosc kielicha'], 'Dokładność klasyfikacji dla różnych k - długość i szerokość kielicha', 2)
-analyze_knn(['Dlugosc platka', 'Szerokosc platka'], 'Dokładność klasyfikacji dla różnych k - długość i szerokość płatka', 3)
-analyze_knn(['Dlugosc kielicha', 'Dlugosc platka'], 'Dokładność klasyfikacji dla różnych k - długość kielicha i płatka', 4)
-analyze_knn(['Szerokosc kielicha', 'Szerokosc platka'], 'Dokładność klasyfikacji dla różnych k - szerokość kielicha i płatka', 5)
-analyze_knn(['Dlugosc kielicha', 'Szerokosc platka'], 'Dokładność klasyfikacji dla różnych k - długość kielicha i szerokość płatka', 6)
-analyze_knn(['Szerokosc kielicha', 'Dlugosc platka'], 'Dokładność klasyfikacji dla różnych k - szerokość kielicha i długość płatka', 7)
+# Wywolanie funkcji
+analyze_knn(['Dlugosc kielicha', 'Szerokosc kielicha', 'Dlugosc platka', 'Szerokosc platka'], 'Dokladnosc klasyfikacji dla roznych k - wszystkie cechy', 1)
+analyze_knn(['Dlugosc kielicha', 'Szerokosc kielicha'], 'Dokladnosc klasyfikacji dla roznych k - dlugosc i szerokosc kielicha', 2)
+analyze_knn(['Dlugosc platka', 'Szerokosc platka'], 'Dokladnosc klasyfikacji dla roznych k - dlugosc i szerokosc platka', 3)
+analyze_knn(['Dlugosc kielicha', 'Dlugosc platka'], 'Dokladnosc klasyfikacji dla roznych k - dlugosc kielicha i platka', 4)
+analyze_knn(['Szerokosc kielicha', 'Szerokosc platka'], 'Dokladnosc klasyfikacji dla roznych k - szerokosc kielicha i platka', 5)
+analyze_knn(['Dlugosc kielicha', 'Szerokosc platka'], 'Dokladnosc klasyfikacji dla roznych k - dlugosc kielicha i szerokosc platka', 6)
+analyze_knn(['Szerokosc kielicha', 'Dlugosc platka'], 'Dokladnosc klasyfikacji dla roznych k - szerokosc kielicha i dlugosc platka', 7)
 
 plt.show()
 
