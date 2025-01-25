@@ -25,7 +25,7 @@ def analyze_knn(feature_columns, description, figure_number):
     y_train = data_train['Gatunek'].values
 
     x_test = data_test[feature_columns].values
-    y_test_f = data_test['Gatunek'].values
+    y_test = data_test['Gatunek'].values
 
     # Normalizacja danych
     scaler = MinMaxScaler()
@@ -41,13 +41,13 @@ def analyze_knn(feature_columns, description, figure_number):
     # Sprawdzenie dokładności modelu dla różnych wartości k
     for k in k_range:
 
-        # Tworzenie i trenowanie modelu k-NN z wagami opartymi na odległości aby rozwiązać problem remisów
-        knn = KNeighborsClassifier(n_neighbors=k, weights='distance')
+        # Tworzenie i trenowanie modelu k-NN
+        knn = KNeighborsClassifier(n_neighbors=k)
         knn.fit(x_train_norm, y_train)
 
         # Sprawdzenie dokładności modelu
         y_pred = knn.predict(x_test_norm)
-        accuracy = accuracy_score(y_test_f, y_pred) # accuracy zwraca od 0 do 1, gdzie 1 oznacza 100% dokładności
+        accuracy = accuracy_score(y_test, y_pred) # accuracy zwraca od 0 do 1, gdzie 1 oznacza 100% dokładności
         accuracies.append(accuracy * 100)
 
 
@@ -55,12 +55,12 @@ def analyze_knn(feature_columns, description, figure_number):
     plt.figure(figure_number, figsize=(10, 6), tight_layout=True)
     plt.bar(k_range, accuracies)
     plt.title(description, fontsize=16, pad=15)
-    plt.xlabel('Liczba sasiadow (k)', fontsize=14, labelpad=15)
-    plt.ylabel('Dokladnosc (%)', fontsize=14, labelpad=15)
-    plt.xticks(k_range, fontsize=12)
+    plt.xlabel('Liczba sasiadow (k)', fontsize=16, labelpad=15)
+    plt.ylabel('Dokladnosc (%)', fontsize=16, labelpad=15)
+    plt.xticks(k_range, fontsize=16)
     plt.grid(axis='y', which='both')
     plt.ylim(60, 105)
-    plt.yticks(np.arange(60, 105, 5), fontsize=12)
+    plt.yticks(np.arange(60, 105, 5), fontsize=16)
 
     # Najlepsza wartość k
     print(f'--- Wyniki dla cech {feature_columns} ---')
@@ -68,14 +68,13 @@ def analyze_knn(feature_columns, description, figure_number):
     print(f'Najlepsze k: {best_k}, dokladnosc: {max(accuracies):.2f}%')
 
     # Macierz pomyłek dla najlepszego k
-    knn = KNeighborsClassifier(n_neighbors=best_k, weights='distance')
+    knn = KNeighborsClassifier(n_neighbors=best_k)
     knn.fit(x_train_norm, y_train)
     y_pred = knn.predict(x_test_norm)
-    conf_matrix = confusion_matrix(y_test_f, y_pred) # Macierz pomyłek
+    conf_matrix = confusion_matrix(y_test, y_pred) # Macierz pomyłek
     print('Macierz pomylek dla najlepszego k:')
     print(conf_matrix)
 
-# Wywołanie funkcji
 # Wywolanie funkcji
 analyze_knn(['Dlugosc kielicha', 'Szerokosc kielicha', 'Dlugosc platka', 'Szerokosc platka'], 'Dokladnosc klasyfikacji dla roznych k - wszystkie cechy', 1)
 analyze_knn(['Dlugosc kielicha', 'Szerokosc kielicha'], 'Dokladnosc klasyfikacji dla roznych k - dlugosc i szerokosc kielicha', 2)
